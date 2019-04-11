@@ -1,0 +1,2 @@
+while(num!=100){num++;}
+while(num!=100){num++;}
