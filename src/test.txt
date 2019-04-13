@@ -1,2 +1,6 @@
-while(num!=100){num++;}
-while(num!=100){num++;}
+/*×¢ÊÍ*/
+while(num != 100){
+	num++;
+}
+
+float a = 1.234;

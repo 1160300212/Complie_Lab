@@ -15,7 +15,9 @@ public class Read_File {
 			BufferedReader br = new BufferedReader(fr);
 			String temp = null;
 			while ((temp = br.readLine()) != null) {
-				strbuf.append(temp);
+				String[] s = temp.split("	");
+				for(int i = 0; i < s.length; i++)
+					strbuf.append(s[i]);
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("源文件未找到！");
