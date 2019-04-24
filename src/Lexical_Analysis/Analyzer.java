@@ -8,21 +8,14 @@ import java.util.Map;
 public class Analyzer {
 	
 	static ArrayList<String> keyword = new ArrayList<String>(  //关键字
-			Arrays.asList("abstract", "boolean", "break", "byte","case",
-					"catch", "char", "class", "continue", "default", "do",
-					"double", "else", "extends", "final", "finally", "float",
-					"for","if", "implements", "import", "instanceof", "int",
-					"interface", "long", "native", "new", "package", "private",
-					"protected", "public", "return", "short", "static", "super",
-					"switch","synchronized", "this", "throw","throws", "transient",
-					"try","void","volatile","while","strictfp","enum","goto","const","assert"));
+			Arrays.asList("int", "float", "if", "then", "else", "do", "while")); //编码为1-7
 	static ArrayList<Character> operator = new ArrayList<Character>( //一位操作符
-			Arrays.asList('+', '-', '*', '/', '&', '|', '~', '>', '=', '<'));
+			Arrays.asList('+', '-', '*', '/', '>', '=', '<', '&', '|'));  //编码为8-16
 	static ArrayList<String> operator2 = new ArrayList<String>( //两位操作符
-			Arrays.asList(">=", "<=", "!=", "++", "--"));
+			Arrays.asList(">=", "<=", "!=", "++", "--", "==", "&&", "||")); //编码为17-24
 	static ArrayList<Character> boundary = new ArrayList<Character>( //边界符
-			Arrays.asList(',', ';', '(', ')', '[', ']', '{', '}'));
-	
+			Arrays.asList(',', ';', '(', ')', '[', ']', '{', '}')); //编码为24-32
+	// id: 33, inum: 34, fnum: 35;
 	static ArrayList<String> wordlist = new ArrayList<String>();
 	static ArrayList<String> tokenlist = new ArrayList<String>();
 	static Map<String, Integer> symbolmap = new HashMap<String, Integer>();
@@ -55,59 +48,19 @@ public class Analyzer {
 		switch(s) {
 		case "do": return "<DO, - >";
 		case "if": return "<IF, - >";
-		case "for": return "<FOR, - >";
 		case "int": return "<INT, - >";
-		case "new": return "<NEW, - >";
-		case "try": return "<TRY, - >";
-		case "byte": return "<BYTE, - >";
-		case "case": return "<CASE, - >";
-		case "char": return "<CHAR, - >";
 		case "else": return "<ELSE, - >";
-		case "long": return "<LONG, - >";
-		case "this": return "<THIS, - >";
-		case "void": return "<VOID, - >";
-		case "enum": return "<ENUM, - >";
-		case "goto": return "<GOTO, - >";
-		case "break": return "<BREAK, - >";
-		case "catch": return "<CATCH, - >";
-		case "class": return "<CLASS, - >";
-		case "final": return "<FINAL, - >";
+		case "then": return "<THEN, - >";
 		case "float": return "<FLOAT, - >";
-		case "short": return "<SHORT, - >";
-		case "super": return "<SUPER, - >";
-		case "throw": return "<THROW, - >";
 		case "while": return "<WHILE, - >";
-		case "const": return "<CONST, - >";
-		case "double": return "<DOUBLE, - >";
-		case "import": return "<IMPORT, - >";
-		case "native": return "<NATIVE, - >";
-		case "public": return "<PUBLIC, - >";
-		case "return": return "<RETURN, - >";
-		case "static": return "<STATIC, - >";
-		case "switch": return "<SWITCH, - >";
-		case "throws": return "<THROWS, - >";
-		case "assert": return "<ASSERT, - >";
-		case "boolean": return "<BOOLEAN, - >";
-		case "default": return "<DEFAULT, - >";
-		case "extends": return "<EXTENDS, - >";
-		case "finally": return "<FINALLY, - >";
-		case "package": return "<PACKAGE, - >";
-		case "private": return "<PRIVATE, - >";
-		case "abstract": return "<ABSTRACT, - >";
-		case "continue": return "<CONTINUE, - >";
-		case "volatile": return "<VOLATILE, - >";
-		case "strictfp": return "<STRICTFP, - >";
-		case "interface": return "<INTERFACE, - >";
-		case "protected": return "<PROTECTED, - >";
-		case "transient": return "<TRANSIENT, - >";
-		case "implements": return "<IMPLEMENTS, - >";
-		case "instanceof": return "<INSTANCEOF, - >";
-		case "synchronized": return "<SYNCHRONIZED, - >";
 		case ">=": return "<nole, - >";
 		case "<=": return "<nomo, - >";
 		case "!=": return "<noeq, - >";
 		case "++": return "<INC, - >";
 		case "--": return "<DEC, - >";
+		case "==": return "<LEQ, - >";
+		case "||": return "<LOR, - >";
+		case "&&": return "<LAND, - >";
 		default : System.out.println("ERROR, string not exist.");
 		return null;
 		}
@@ -122,9 +75,8 @@ public class Analyzer {
 		case '>': return "<GT, - >";
 		case '<': return "<LT, - >";
 		case '=': return "<EQ, - >";
-		case '&': return "<AND, - >";
 		case '|': return "<OR, - >";
-		case '~': return "<NOT, - >";
+		case '&': return "<AND, - >";
 		case ',': return "<COOMA, - >";
 		case ';': return "<SEMI, - >";
 		case '(': return "<SLP, - >";
@@ -142,19 +94,19 @@ public class Analyzer {
 		if(type.equals("id")) {
 			return "<ID, " + s + ">";
 		}
-		else if(type.equals("digit")) {
-			return "<DIGIT, " + s + ">";
+		else if(type.equals("inum")) {
+			return "<INUM, " + s + ">";
 		}
-		else if(type.equals("fdigit")) {
-			return "<FDIGIT, " + s + ">";
+		else if(type.equals("fnum")) {
+			return "<FNUM, " + s + ">";
 		}
 		else{
-			System.out.println("ERROR,!");
+			System.out.println("ERROR!");
 			return null;
 		}
 	}
 	
-	public int type_code(String s) {
+	public int type_code(String s) { //查询类别编码
 		if(keyword.contains(s)){
 			for(int i = 0; i < keyword.size(); i++) {
 				if(keyword.get(i).equals(s)) {
@@ -165,14 +117,14 @@ public class Analyzer {
 		if(operator2.contains(s)){
 			for(int i = 0; i < operator2.size(); i++) {
 				if(operator2.get(i).equals(s)) {
-					return i+61;
+					return i+15;
 				}
 			}
 		}
 		return 0;
 	}
 	
-	public int type_code(char c) {
+	public int type_code(char c) { //查询类别编码
 		if(boundary.contains(c)){
 			for(int i = 0; i < boundary.size(); i++) {
 				if(boundary.get(i) == c) {
@@ -183,11 +135,12 @@ public class Analyzer {
 		return 0;
 	}
 	
-	public Analyzer(StringBuffer strbuf) {
+	public ArrayList<String> Analyzer(StringBuffer strbuf) {
 		String token = "";
 		boolean first_letter = true;
 		boolean is_digit = false;
 		boolean is_float = false;
+		int point = 0;
 		for(int i = 0; i < strbuf.length(); i++) {
 			char ch = strbuf.charAt(i);
 			if(is_letter_(ch) || is_digit(ch)) {
@@ -200,12 +153,15 @@ public class Analyzer {
 				token += ch;
 			}
 			else if(ch == '.') {
-				if(is_digit) {
+				if(is_digit && point == 0) {
+					point = 1;
 					token += ch;
 					is_float = true;
 				}
 				else {
-					System.out.println("ERROR!");
+					token += ch;
+					is_float = true;
+					System.out.println("ERROR, illegal float!");
 				}
 			}
 			else {
@@ -218,16 +174,16 @@ public class Analyzer {
 					else {
 						if(is_digit) {
 							if(is_float) {
-								symbolmap.put(token, 76);
-								tokenlist.add(binary_group(token, "fdigit"));
+								symbolmap.put(token, 35);
+								tokenlist.add(binary_group(token, "fnum"));
 							}
 							else {
-								symbolmap.put(token, 75);
-								tokenlist.add(binary_group(token, "digit"));
+								symbolmap.put(token, 34);
+								tokenlist.add(binary_group(token, "inum"));
 							}
 						}
 						else {
-							symbolmap.put(token, 74);
+							symbolmap.put(token, 33);
 							tokenlist.add(binary_group(token, "id"));
 						}
 					}
@@ -235,6 +191,7 @@ public class Analyzer {
 					first_letter = true;
 					is_digit = false;
 					is_float = false;
+					point = 0;
 				}
 				if(ch == '/' && strbuf.charAt(i+1) == '*') { //跳过注释
 					i = i + 2;
@@ -267,13 +224,51 @@ public class Analyzer {
 				
 			}
 		}
-		/*for(int i = 0; i < tokenlist.size(); i++) {
+		for(int i = 0; i < tokenlist.size(); i++) {
 			System.out.println(wordlist.get(i) + "   " + tokenlist.get(i));
-		}*/
-		/*
+		}
+		
 		for (Map.Entry<String, Integer> entry : symbolmap.entrySet()) { 
 			  System.out.println("< " + entry.getValue() + ",  " + entry.getKey() + "> "); 
-		}*/
+		}
+		
+		ArrayList<String> input = new ArrayList<String>();
+		for(int i = 0; i < tokenlist.size(); i++) {
+			String tmp = "";
+			int t = 0;
+			for(int j = 0; j < tokenlist.get(i).length(); j++){
+				if(tokenlist.get(i).charAt(j) == ',') {
+					t = j;
+				}
+			}
+			tmp = tokenlist.get(i).substring(1, t);
+			if(tmp.equals("DO")) input.add("do");
+			else if(tmp.equals("IF")) input.add("if");
+			else if(tmp.equals("INT")) input.add("int");
+			else if(tmp.equals("ELSE")) input.add("else");
+			else if(tmp.equals("THEN")) input.add("then");
+			else if(tmp.equals("FLOAT")) input.add("float");
+			else if(tmp.equals("WHILE")) input.add("while");
+			else if(tmp.equals("nole")) input.add(">=");
+			else if(tmp.equals("nomo")) input.add("<=");
+			else if(tmp.equals("LEQ")) input.add("==");
+			else if(tmp.equals("LAND")) input.add("&&");
+			else if(tmp.equals("LOR")) input.add("}}");
+			else if(tmp.equals("ID")) input.add("id");
+			else if(tmp.equals("INUM")) input.add("inum");
+			else if(tmp.equals("FNUM")) input.add("fnum");
+			else if(tmp.equals("ADD")) input.add("+");
+			else if(tmp.equals("MIN")) input.add("-");
+			else if(tmp.equals("MUL")) input.add("*");
+			else if(tmp.equals("DIV")) input.add("/");
+			else if(tmp.equals("EQ")) input.add("=");
+			else if(tmp.equals("SEMI")) input.add(";");
+			else if(tmp.equals("SLP")) input.add("(");
+			else if(tmp.equals("SRP")) input.add(")");
+			else if(tmp.equals("LP")) input.add("{");
+			else if(tmp.equals("RP")) input.add("}");
+		}
+		return input;
 	}
 	
 }

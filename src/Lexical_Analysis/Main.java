@@ -9,7 +9,8 @@ public class Main {
 		strbuf = f.strbuf;
 		System.out.println(strbuf);
 		
-		Analyzer a = new Analyzer(strbuf);
+		Analyzer a = new Analyzer();
+		a.Analyzer(strbuf);
 		//analysis(strbuf);
 	}
 

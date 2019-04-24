@@ -1,6 +1,9 @@
 /*×¢ÊÍ*/
+
+int num = 10;
+
+float a = 1.23.4;
+
 while(num != 100){
 	num++;
 }
-
-float a = 1.234;

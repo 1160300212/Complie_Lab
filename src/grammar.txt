@@ -1,0 +1,34 @@
+<S> <states> <dec> <ass> <cond> <loop> <Type> <E> <num> <T> <logic>
+<int> <float> <id> <=> <;> <+> <-> <*> </> <(> <)> <{> <}> <inum> <fnum> <if> <then> <else> <&&> <||> <>> <<> <>=> <<=> <==> <!=> <do> <while>
+
+<S> -> <states>
+<states> -> <states> <states>
+<states> -> <dec>
+<states> -> <ass>
+<states> -> <cond>
+<states> -> <loop>
+<dec> -> <Type> <id> <;>
+<Type> -> <int>
+<Type> -> <float>
+<ass> -> <id> <=> <E> <;>
+<E> -> <id>
+<E> -> <num>
+<E> -> <E> <+> <E>
+<E> -> <E> <-> <E>
+<E> -> <E> <*> <E>
+<E> -> <E> </> <E>
+<E> -> <(> <E> <)>
+<num> -> <inum>
+<num> -> <fnum>
+<cond> -> <if> <(> <T> <)> <then> <{> <states> <}> <else> <{> <states> <}>
+<T> -> <(> <T> <)>
+<T> -> <E> <logic> <E>
+<T> -> <T> <&&> <T>
+<T> -> <T> <||> <T>
+<logic> -> <>>
+<logic> -> <<>
+<logic> -> <>=>
+<logic> -> <<=>
+<logic> -> <==>
+<logic> -> <!=>
+<loop> -> <do> <{> <states> <}> <while> <(> <T> <)> <;>

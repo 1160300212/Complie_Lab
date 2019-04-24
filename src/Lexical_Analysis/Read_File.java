@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Read_File {
 
-	StringBuffer strbuf = new StringBuffer();
+	public StringBuffer strbuf = new StringBuffer();
 	
 	public Read_File(String filename){
 		try {
