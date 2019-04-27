@@ -16,11 +16,11 @@ public class G_Analyzer {
 		this.Action = Action;
 		this.input = input;
 		
-		analysis();
+		//analysis();
 	}
 	
 	public void analysis() {
-		Stack<String> state_stk = new Stack();
+		Stack<String> state_stk = new Stack<String>();
 		state_stk.push("0");
 		/*input.add("int");
 		input.add("id");
@@ -30,7 +30,7 @@ public class G_Analyzer {
 		input.add("inum");
 		input.add(";");*/
 		input.add("#");
-		int index = 0;
+		int index = 0; //ÊäÈë·ûºÅ´®ÏÂ±í
 		System.out.println();
 		while(true) {
 			String op = "null";
@@ -43,6 +43,7 @@ public class G_Analyzer {
 			}
 			if(op.equals("Action") && s.charAt(0) == 'S') {
 				state_stk.push(s.substring(1));
+				if(input.get(index).equals("id") || input.get(index).equals("inum") || input.get(index).equals("fnum")) index++;
 				index++;
 			}
 			else if(op.equals("Action") && s.charAt(0) == 'R') {

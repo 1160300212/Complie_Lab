@@ -1,0 +1,19 @@
+int a;
+int b;
+a = 1;
+b = 2;
+while(a > b)
+do{
+a = a - 1;
+}
+while(a < b)
+do{
+a = a - 1;
+}
+if(a < b)
+then{
+a = a + 1;
+}
+else{
+a = a - 1;
+}

@@ -2,30 +2,23 @@ package Grammar_Analysis;
 
 import java.util.ArrayList;
 
-import Lexical_Analysis.Analyzer;
+import Lexical_Analysis.L_Analyzer;
 import Lexical_Analysis.Read_File;
 
 public class Main {
 
 	public static void main(String args[]) throws Exception {
-		ArrayList<Production> production = new ArrayList<Production>();
-		ArrayList<String> symbolN = new ArrayList<String>();
-		ArrayList<String> symbolT = new ArrayList<String>();
 		
-		Read_Grammar rg = new Read_Grammar("src/grammar.txt");
-		production = rg.get_production();
-		symbolN = rg.get_symbolN();
-		symbolT = rg.get_symbolT();
-		LR_AnalysisTable at = new LR_AnalysisTable(production, symbolN, symbolT);
+		Read_Grammar rg = new Read_Grammar("src/Grammar.txt");
+		LR_AnalysisTable at = new LR_AnalysisTable(rg.get_production(), rg.get_symbolN(), rg.get_symbolT());
+		Read_File file = new Read_File("src/test_G.txt");
+		L_Analyzer a = new L_Analyzer(file.get_str());
+		System.out.println(file.get_str());
 		
+		a.analysis();
+
+		G_Analyzer ga = new G_Analyzer(rg.get_production(), at.get_action(), at.get_goto(), a.grammar_input());
 		
-		StringBuffer strbuf = null;
-		Read_File f = new Read_File("src/test1.txt");
-		strbuf = f.strbuf;
-		System.out.println(strbuf);
-		
-		Analyzer a = new Analyzer();
-		
-		G_Analyzer ga = new G_Analyzer(production, at.Action, at.Goto, a.Analyzer(strbuf));
+		ga.analysis();
 	}
 }

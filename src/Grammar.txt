@@ -1,4 +1,4 @@
-<S> <states> <dec> <ass> <cond> <loop> <Type> <E> <num> <T> <logic>
+<S> <states> <dec> <ass> <cond> <loop> <Type> <E> <num> <T>
 <int> <float> <id> <=> <;> <+> <-> <*> </> <(> <)> <{> <}> <inum> <fnum> <if> <then> <else> <&&> <||> <>> <<> <>=> <<=> <==> <!=> <do> <while>
 
 <S> -> <states>
@@ -21,14 +21,10 @@
 <num> -> <inum>
 <num> -> <fnum>
 <cond> -> <if> <(> <T> <)> <then> <{> <states> <}> <else> <{> <states> <}>
-<T> -> <(> <T> <)>
-<T> -> <E> <logic> <E>
-<T> -> <T> <&&> <T>
-<T> -> <T> <||> <T>
-<logic> -> <>>
-<logic> -> <<>
-<logic> -> <>=>
-<logic> -> <<=>
-<logic> -> <==>
-<logic> -> <!=>
-<loop> -> <do> <{> <states> <}> <while> <(> <T> <)> <;>
+<T> -> <E> <>> <E>
+<T> -> <E> <<> <E>
+<T> -> <E> <>=> <E>
+<T> -> <E> <<=> <E>
+<T> -> <E> <==> <E>
+<T> -> <E> <!=> <E>
+<loop> -> <while> <(> <T> <)> <do> <{> <states> <}>

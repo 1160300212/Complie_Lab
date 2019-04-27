@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/*LR(1)*/
+
 public class LR_AnalysisTable {
 
 	ArrayList<Production> P = new ArrayList<Production>();
@@ -23,14 +25,14 @@ public class LR_AnalysisTable {
 		First();
 		
 		Item_sets();
-		/* 打印项目集
-		for(int i = 0; i < item_sets.size(); i++) {
+		///* 打印项目集
+		for(int i = 0; i < item_sets.size() && i < 22; i++) {
 			System.out.println("I" + i);
 			for(int j = 0; j < item_sets.get(i).size(); j++) {
 				System.out.println(item_sets.get(i).get(j).p.prod + " " + item_sets.get(i).get(j).point +" "+item_sets.get(i).get(j).lk_ahd);
 			}
 			System.out.println();
-		}*/
+		}//*/
 		
 		AnalysisTable();
 		
@@ -210,7 +212,6 @@ public class LR_AnalysisTable {
 		}
 		while(true) {
 			Boolean update = false;
-			Map<String, ArrayList<String>> t = First;
 			for(int i = 0; i < P.size(); i++) {
 				String lft = P.get(i).left;
 				String fst_rgt = P.get(i).right.get(0);
@@ -230,13 +231,20 @@ public class LR_AnalysisTable {
 				break;
 			}
 		}
-		/* 打印FIRST
+		//* 打印FIRST
 		for (Entry<String, ArrayList<String>> entry : First.entrySet()) {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
-		}*/
+		}//*/
 	}
 	
-
+	public ArrayList<String[]> get_action(){
+		return Action;
+	}
+	
+	public ArrayList<String[]> get_goto(){
+		return Goto;
+	}
+	
 }
 
 class Item{

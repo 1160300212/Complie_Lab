@@ -44,6 +44,7 @@ public class Read_Grammar {
 					word += temp.charAt(j);
 				}
 				symbolT.add(word);
+				i = j;
 			}
 		}
 		temp = br.readLine();
@@ -51,6 +52,7 @@ public class Read_Grammar {
 			Production p = new Production(temp);
 			production.add(p);
 		}
+
 	}
 
 	public ArrayList<Production> get_production() throws Exception {
@@ -66,7 +68,7 @@ public class Read_Grammar {
 	}
 
 }
-
+/*
 class Production{
 	String prod = "";
 	String left = "";
@@ -93,4 +95,4 @@ class Production{
 			}
 		}
 	}
-}
+}*/
