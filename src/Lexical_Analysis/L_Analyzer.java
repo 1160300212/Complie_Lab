@@ -11,14 +11,14 @@ public class L_Analyzer {
 	static ArrayList<String> keyword = new ArrayList<String>( // 关键字
 			Arrays.asList("int", "float", "if", "then", "else", "do", "while")); // 编码为1-7
 	static ArrayList<Character> operator = new ArrayList<Character>( // 一位操作符
-			Arrays.asList('+', '-', '*', '/', '>', '=', '<', '&', '|', '!')); // 编码为8-16
+			Arrays.asList('+', '-', '*', '/', '>', '=', '<', '&', '|', '!')); // 编码为8-17
 	static ArrayList<String> operator2 = new ArrayList<String>( // 两位操作符
-			Arrays.asList(">=", "<=", "!=", "++", "--", "==", "&&", "||")); // 编码为17-24
+			Arrays.asList(">=", "<=", "!=", "++", "--", "==", "&&", "||")); // 编码为18-25
 	static ArrayList<Character> boundary = new ArrayList<Character>( // 边界符
-			Arrays.asList(',', ';', '(', ')', '[', ']', '{', '}')); // 编码为24-32
-	// id: 33, inum: 34, fnum: 35;
-	static ArrayList<String> wordlist = new ArrayList<String>();
+			Arrays.asList(',', ';', '(', ')', '[', ']', '{', '}')); // 编码为26-33
+	// id: 34, inum: 35, fnum: 36;
 	static ArrayList<String> tokenlist = new ArrayList<String>();
+	static ArrayList<String> wordlist = new ArrayList<String>();
 	static ArrayList<Integer> linelist = new ArrayList<Integer>();
 	static ArrayList<SymbolTable_record> symbolmap = new ArrayList<SymbolTable_record>();
 
@@ -168,11 +168,11 @@ public class L_Analyzer {
 		return 0;
 	}
 
-	public L_Analyzer(ArrayList<StringBuffer> strbuf) {
+	public L_Analyzer(ArrayList<StringBuffer> strbuf) { //构造函数
 		this.strbuf = strbuf;
 	}
 
-	public void analysis() {
+	public void analysis() { //根据自动机进行词法分析
 		String token = "";
 		boolean first_letter = true;
 		boolean is_digit = false;
@@ -262,6 +262,7 @@ public class L_Analyzer {
 				}
 			}
 		}
+		/*
 		System.out.println("Token:");
 		for (int i = 0; i < tokenlist.size(); i++) {
 			System.out.println(wordlist.get(i) + "   " + tokenlist.get(i) + "  " + linelist.get(i));
@@ -271,11 +272,11 @@ public class L_Analyzer {
 		System.out.println("符号表:");
 		for (int i = 0; i < symbolmap.size(); i++) {
 			System.out.println("address: " + i + "  id: " + symbolmap.get(i).id + "  value: " + symbolmap.get(i).value);
-		}
+		}*/
 
 	}
 
-	public ArrayList<String> grammar_input() {
+	public ArrayList<String> grammar_input() { //生成语法分析能处理的输入序列
 		ArrayList<String> input = new ArrayList<String>();
 		for (int i = 0; i < tokenlist.size(); i++) {
 			String tmp = "";
@@ -358,9 +359,16 @@ public class L_Analyzer {
 		return input;
 	}
 
-	public ArrayList<SymbolTable_record> get_symbolmap() {
+	public ArrayList<SymbolTable_record> get_symbolmap() { //返回符号表
 		return symbolmap;
 	}
 	
+	public String get_token() { //返回token序列
+		String str = "";
+		for(int i = 0; i < tokenlist.size(); i++) {
+			str += tokenlist.get(i) + "\n";
+		}
+		return str;
+	}
 	
 }

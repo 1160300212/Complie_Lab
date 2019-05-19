@@ -4,15 +4,16 @@ int z;
 x = 10;
 y = 3.1415;
 z = x + y;
-if(x==y)then{
+if(x == y)then{
     z = x + z;
 }else{
     int t;
     t = z;
 }
+while(x >= y)
 do{
-float m;
-m =x+y*z;
-float t;
-t= y+x*z;
-}while(x >= y);
+	float m;
+	m = x + y * z;
+	float t;
+	t = y + x * z;
+}

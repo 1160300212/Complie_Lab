@@ -17,7 +17,7 @@ public class LR_AnalysisTable {
 	ArrayList<String[]> Action = new ArrayList<String[]>();
 	Map<String, ArrayList<String>> First = new HashMap<String, ArrayList<String>>();
 	
-	public LR_AnalysisTable(ArrayList<Production> production, ArrayList<String> symbolN, ArrayList<String> symbolT) {
+	public LR_AnalysisTable(ArrayList<Production> production, ArrayList<String> symbolN, ArrayList<String> symbolT) { //构造函数
 		this.P = production;
 		this.SN = symbolN;
 		this.ST = symbolT;
@@ -25,20 +25,20 @@ public class LR_AnalysisTable {
 		First();
 		
 		Item_sets();
-		///* 打印项目集
+		/* 打印项目集
 		for(int i = 0; i < item_sets.size() && i < 22; i++) {
 			System.out.println("I" + i);
 			for(int j = 0; j < item_sets.get(i).size(); j++) {
 				System.out.println(item_sets.get(i).get(j).p.prod + " " + item_sets.get(i).get(j).point +" "+item_sets.get(i).get(j).lk_ahd);
 			}
 			System.out.println();
-		}//*/
+		}*/
 		
 		AnalysisTable();
 		
 	}
 	
-	public ArrayList<Item> CLOSURE(ArrayList<Item> item_set){
+	public ArrayList<Item> CLOSURE(ArrayList<Item> item_set){ //计算给定项目集item_set的闭包
 		while(true) {
 			ArrayList<Item> t = item_set;
 			for(int i = 0; i < item_set.size(); i++) { //item_set.get(i)  每个项
@@ -85,7 +85,7 @@ public class LR_AnalysisTable {
 		return item_set;
 	}
 	
-	public ArrayList<Item> GOTO(ArrayList<Item> item_set, String next) {
+	public ArrayList<Item> GOTO(ArrayList<Item> item_set, String next) { //返回项目集item_set对应于文法符号next的后继项目集闭
 		ArrayList<Item> t = new ArrayList<Item>();
 		for(int i = 0; i < item_set.size(); i++) {
 			if(item_set.get(i).next_sym.equals(next)) {
@@ -95,7 +95,7 @@ public class LR_AnalysisTable {
 		return CLOSURE(t);
 	}
 	
-	public void Item_sets() {
+	public void Item_sets() { //求规范LR（0）项集族
 		ArrayList<Item> i0set = new ArrayList<Item>();
 		i0set.add(new Item(P.get(0), 0, "#"));
 		i0set = CLOSURE(i0set);
@@ -125,7 +125,7 @@ public class LR_AnalysisTable {
 		}
 	}
 	
-	public void AnalysisTable() {	
+	public void AnalysisTable() { //求Goto函数和Action函数
 		for(int i = 0; i < item_sets.size(); i++) {
 			for(int j = 0; j < item_sets.get(i).size(); j++) {
 				if(SN.contains(item_sets.get(i).get(j).next_sym)) {
@@ -184,6 +184,7 @@ public class LR_AnalysisTable {
 			}
 		}
 		/*打印Goto Action
+		System.out.println("Goto :");
 		for(int i = 0; i < Goto.size(); i++) {
 			for(int j = 0; j < 3; j++) {
 				System.out.print(Goto.get(i)[j] + " ");
@@ -191,6 +192,7 @@ public class LR_AnalysisTable {
 			System.out.println();
 		}
 		System.out.println();
+		System.out.println("Action :");
 		for(int i = 0; i < Action.size(); i++) {
 			for(int j = 0; j < 3; j++) {
 				System.out.print(Action.get(i)[j] + " ");
@@ -200,7 +202,7 @@ public class LR_AnalysisTable {
 		
 	}
 	
-	public void First(){
+	public void First(){ //求所有符号的FIRST集
 		for(int i = 0; i < SN.size(); i++) {
 			ArrayList<String> tmp = new ArrayList<String>();
 			First.put(SN.get(i), tmp);
@@ -231,17 +233,17 @@ public class LR_AnalysisTable {
 				break;
 			}
 		}
-		//* 打印FIRST
+		/* 打印FIRST
 		for (Entry<String, ArrayList<String>> entry : First.entrySet()) {
 			System.out.println(entry.getKey() + ": " + entry.getValue());
-		}//*/
+		}*/
 	}
 	
-	public ArrayList<String[]> get_action(){
+	public ArrayList<String[]> get_action(){ //返回Action
 		return Action;
 	}
 	
-	public ArrayList<String[]> get_goto(){
+	public ArrayList<String[]> get_goto(){ //返回Goto
 		return Goto;
 	}
 	

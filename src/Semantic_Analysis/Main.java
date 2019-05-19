@@ -15,10 +15,11 @@ public class Main {
 		
 		Read_File file = new Read_File("src/test_S.txt");
 		
-		L_Analyzer a = new L_Analyzer(file.get_str());
+		L_Analyzer a = new L_Analyzer(file.get_strbuf());
 		a.analysis();
-		//G_Analyzer ga = new G_Analyzer(rg.get_production(), at.get_action(), at.get_goto(), a.grammar_input());
-		
+		G_Analyzer ga = new G_Analyzer(rg.get_production(), at.get_action(), at.get_goto(), a.grammar_input());
+
 		S_Analyzer sa = new S_Analyzer(rg.get_production(), at.get_action(), at.get_goto(), a.grammar_input(), a.get_symbolmap());
+		
 	}
 }

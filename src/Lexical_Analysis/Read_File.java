@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Read_File {
 
 	public ArrayList<StringBuffer> strbuf = new ArrayList<StringBuffer>();
+	public String str = "";
 	
 	public Read_File(String filename){
 		try {
@@ -22,6 +23,7 @@ public class Read_File {
 				for(int i = 0; i < s.length; i++)
 					tmpbuf.append(s[i]);
 				strbuf.add(tmpbuf);
+				str += temp + "\n";
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("源文件未找到！");
@@ -32,7 +34,11 @@ public class Read_File {
 		}
 	}
 	
-	public ArrayList<StringBuffer> get_str() {
+	public ArrayList<StringBuffer> get_strbuf() {
 		return strbuf;
+	}
+	
+	public String get_str() {
+		return str;
 	}
 }

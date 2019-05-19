@@ -12,6 +12,7 @@ public class Read_Grammar {
 	private ArrayList<Production> production = new ArrayList<Production>();
 	private ArrayList<String> symbolN = new ArrayList<String>();
 	private ArrayList<String> symbolT = new ArrayList<String>();
+	private String gra = "";
 
 	public Read_Grammar(String filename) throws Exception {
 		this.filename = filename;
@@ -51,6 +52,7 @@ public class Read_Grammar {
 		while ((temp = br.readLine()) != null) {
 			Production p = new Production(temp);
 			production.add(p);
+			gra += temp + "\n";
 		}
 
 	}
@@ -66,33 +68,9 @@ public class Read_Grammar {
 	public ArrayList<String> get_symbolT() throws Exception {
 		return symbolT;
 	}
+	
+	public String get_gra() {
+		return gra;
+	}
 
 }
-/*
-class Production{
-	String prod = "";
-	String left = "";
-	ArrayList<String> right = new ArrayList<String>();
-	
-	public Production(String s){
-		this.prod = s;
-		for (int i = 0; i < s.length(); i++) {
-			String word = "";
-			int j = i;
-			if (s.charAt(i) == '<') {
-				for (j = i + 1; j < s.length(); j++) {
-					if (s.charAt(j) == '>' && j - i > 1) {
-						break;
-					}
-					word += s.charAt(j);
-				}
-				if(left.equals("")) {
-					left = word;
-				}
-				else {
-					right.add(word);
-				}
-			}
-		}
-	}
-}*/

@@ -1,6 +1,8 @@
 package Semantic_Analysis;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import Grammar_Analysis.Production;
@@ -18,36 +20,40 @@ public class S_Analyzer {
 	ArrayList<String> output_order = new ArrayList<String>();
 	
 	int tmpind = 1;
+	int index = 0;
 	
-	public S_Analyzer(ArrayList<Production> P, ArrayList<String[]> Action, ArrayList<String[]> Goto, ArrayList<String> input, ArrayList<SymbolTable_record> symbolmap) {
+	public S_Analyzer(ArrayList<Production> P, ArrayList<String[]> Action, ArrayList<String[]> Goto, ArrayList<String> input, ArrayList<SymbolTable_record> symbolmap) { //构造函数
 		this.P = P;
 		this.Goto = Goto;
 		this.Action = Action;
 		this.input = input;
 		this.symbolmap = symbolmap;
 		
+		/*
 		for(int i = 0; i < P.size(); i++) {
 			System.out.println("i "+i+" "+P.get(i).prod);
-		}
+		}*/
 		
 		analysis();
 
+		/*
 		for(int i = 0; i < four_tuple.size(); i++) {
 			System.out.println(i + "  " +four_tuple.get(i) + "    " + output_order.get(i));
 		}
 		
-		for(int i = 0; i < symbolmap.size(); i++) {
-			System.out.println(symbolmap.get(i).id + " " + symbolmap.get(i).type + " " + symbolmap.get(i).value);
-		}
+		System.out.println("符号表:");
+		for (int i = 0; i < symbolmap.size(); i++) {
+			System.out.println("address: " + i + "  id: " + symbolmap.get(i).id + "  type: " + symbolmap.get(i).type + "  value: " + symbolmap.get(i).value);
+		}*/
 		
 	}
 	
-	public void analysis() {
+	public void analysis() { //对输入进行语法分析,同时执行对应语义动作
 		Stack<String> state_stk = new Stack<String>();
 		Stack<Stack_record> symbol_stk = new Stack<Stack_record>();
 		state_stk.push("0");
 		input.add("#");
-		int index = 0; //输入符号串下标
+		//int index = 0; //输入符号串下标
 		System.out.println();
 		while(true) {
 			String op = "null";
@@ -66,6 +72,7 @@ public class S_Analyzer {
 					re.addr = Integer.parseInt(input.get(index));
 					re.id_value = symbolmap.get(re.addr).id;
 					re.num_value = symbolmap.get(re.addr).value;
+					re.ind = index;
 				}
 				else if(input.get(index).equals("inum") || input.get(index).equals("fnum")) {
 					index++;
@@ -82,7 +89,8 @@ public class S_Analyzer {
 				if(symbol_stk.peek().symbol.equals("else")) {
 					symbol_stk.peek().label = four_tuple.size();
 				}
-				print_symbol_stk(symbol_stk);
+				//print_symbol_stk(symbol_stk);
+				//System.out.println("input  " + input.get(index));
 			}
 			else if(op.equals("Action") && s.charAt(0) == 'R') { //规约操作
 				int tmp = Integer.parseInt(s.substring(1));
@@ -100,25 +108,25 @@ public class S_Analyzer {
 						break;
 					}
 				}
-				System.out.println(P.get(tmp).prod);
+				//System.out.println(P.get(tmp).prod);
 			}
 			else if(op.equals("Action") && s.equals("acc")){
-				System.out.println(P.get(0).prod);
+				//System.out.println(P.get(0).prod);
 				break;
 			}
 		}
 	}
 
-	public void print_symbol_stk(Stack<Stack_record> symbol_stk) {
+	public void print_symbol_stk(Stack<Stack_record> symbol_stk) { //打印当前符号栈的内容
 		System.out.print("symbol_stk:   ");
 		for(int i = 0; i < symbol_stk.size(); i++) {
-			System.out.print(symbol_stk.get(i).symbol + "." + symbol_stk.get(i).id_value + "." + symbol_stk.get(i).bool + "  ");
+			System.out.print(symbol_stk.get(i).symbol + "   ");
 			//System.out.print(symbol_stk.get(i).symbol + "  ");
 		}
 		System.out.println();
 	}
 	
-	public void reduce_case(Production p, Stack<Stack_record> symbol_stk, Stack_record re) {
+	public void reduce_case(Production p, Stack<Stack_record> symbol_stk, Stack_record re) { //不同产生式规约时的语义动作
 		switch(P.indexOf(p)) {
 		case 6: //<dec> -> <Type> <id> <;>
 			symbolmap.get(symbol_stk.get(symbol_stk.size()-2).addr).type = symbol_stk.get(symbol_stk.size()-3).type;
@@ -141,11 +149,11 @@ public class S_Analyzer {
 			symbol_stk.get(symbol_stk.size()-4).num_value = symbol_stk.get(symbol_stk.size()-2).num_value;
 			if(symbol_stk.get(symbol_stk.size()-2).id_value.equals("")) {
 				output_order.add(symbol_stk.get(symbol_stk.size()-4).id_value + " = " + symbol_stk.get(symbol_stk.size()-2).num_value);
-				four_tuple.add("(=, " + symbol_stk.get(symbol_stk.size()-2).num_value + ", -, " + symbol_stk.get(symbol_stk.size()-4).id_value + ")");
+				four_tuple.add("(=, " + symbol_stk.get(symbol_stk.size()-2).num_value + ", _, " + symbol_stk.get(symbol_stk.size()-4).id_value + ")");
 			}
 			else {
 				output_order.add(symbol_stk.get(symbol_stk.size()-4).id_value + " = " + symbol_stk.get(symbol_stk.size()-2).id_value);
-				four_tuple.add("(=, " + symbol_stk.get(symbol_stk.size()-2).id_value + ", -, " + symbol_stk.get(symbol_stk.size()-4).id_value + ")");
+				four_tuple.add("(=, " + symbol_stk.get(symbol_stk.size()-2).id_value + ", _, " + symbol_stk.get(symbol_stk.size()-4).id_value + ")");
 			}
 			break;
 		case 10: //<E> -> <id>
@@ -244,16 +252,12 @@ public class S_Analyzer {
 					label2 = symbol_stk.get(i).label;
 				}
 			}
-			four_tuple.add("(j , -, -, " + (four_tuple.size()+2)  + ")");
+			four_tuple.add("(j , _, _, " + (four_tuple.size()+2)  + ")");
 			output_order.add("goto " + (four_tuple.size()+1));
-			four_tuple.set(label2+1, "(j , -, -, " + (label+1)  + ")");
+			four_tuple.set(label2+1, "(j , _, _, " + (label+1)  + ")");
 			output_order.set(label2+1, "goto " + (label+1));
-			System.out.println("if  --------" + label2);
-			System.out.println("else  --------" + label);
-			
-			four_tuple.add(label, "(j , -, -, " + (four_tuple.size()+1)  + ")");
+			four_tuple.add(label, "(j , _, _, " + (four_tuple.size()+1)  + ")");
 			output_order.add(label, "goto " +(four_tuple.size()));
-			
 			break;
 		case 20://<T> -> <E> <>> <E>
 			if((!symbol_stk.get(symbol_stk.size()-3).num_value.equals("")) && (!symbol_stk.get(symbol_stk.size()-1).num_value.equals(""))) {
@@ -290,7 +294,7 @@ public class S_Analyzer {
 				}
 				four_tuple.add("(j>=" + ", " + symbol_stk.get(symbol_stk.size()-3).id_value + ", " + symbol_stk.get(symbol_stk.size()-1).id_value + ", " + (four_tuple.size()+2)+ ")");
 				output_order.add("if "+ symbol_stk.get(symbol_stk.size()-3).id_value + " >= " + symbol_stk.get(symbol_stk.size()-1).id_value + " goto " + (four_tuple.size()+1));
-				four_tuple.add("(j " + ", -, -, ?)");
+				four_tuple.add("(j " + ", _, _, ?)");
 				output_order.add("goto ?");
 			}
 			break;
@@ -304,7 +308,7 @@ public class S_Analyzer {
 				
 				four_tuple.add("(j<=" + ", " + symbol_stk.get(symbol_stk.size()-3).id_value + ", " + symbol_stk.get(symbol_stk.size()-1).id_value + ", " + (four_tuple.size()+2)+ ")");
 				output_order.add("if "+ symbol_stk.get(symbol_stk.size()-3).id_value + " <= " + symbol_stk.get(symbol_stk.size()-1).id_value + " goto " + (four_tuple.size()+1));
-				four_tuple.add("(j " + ", -, -, ?)");
+				four_tuple.add("(j " + ", _, _, ?)");
 				output_order.add("goto ?");
 			}
 			break;
@@ -317,7 +321,7 @@ public class S_Analyzer {
 				}
 				four_tuple.add("(j==" + ", " + symbol_stk.get(symbol_stk.size()-3).id_value + ", " + symbol_stk.get(symbol_stk.size()-1).id_value + ", " + (four_tuple.size()+2)+ ")");
 				output_order.add("if "+ symbol_stk.get(symbol_stk.size()-3).id_value + " == " + symbol_stk.get(symbol_stk.size()-1).id_value + " goto " + (four_tuple.size()+1));
-				four_tuple.add("(j " + ", -, -, ?)");
+				four_tuple.add("(j " + ", _, _, ?)");
 				output_order.add("goto ?");
 			}
 			break;
@@ -330,7 +334,7 @@ public class S_Analyzer {
 				}
 				four_tuple.add("(j!=" + ", " + symbol_stk.get(symbol_stk.size()-3).id_value + ", " + symbol_stk.get(symbol_stk.size()-1).id_value + ", " + (four_tuple.size()+2)+ ")");
 				output_order.add("if "+ symbol_stk.get(symbol_stk.size()-3).id_value + " != " + symbol_stk.get(symbol_stk.size()-1).id_value + " goto " + (four_tuple.size()+1));
-				four_tuple.add("(j " + ", -, -, ?)");
+				four_tuple.add("(j " + ", _, _, ?)");
 				output_order.add("goto ?");
 			}
 			break;
@@ -342,15 +346,22 @@ public class S_Analyzer {
 					
 				}
 			}
-			four_tuple.add("(j " + ", -, -, " + wlabel  + ")");
+			four_tuple.add("(j " + ", _, _, " + wlabel  + ")");
 			output_order.add("goto " + wlabel);
-			four_tuple.set(wlabel+1, "(j , -, -, " + four_tuple.size() +")");
+			four_tuple.set(wlabel+1, "(j , _, _, " + four_tuple.size() +")");
 			output_order.set(wlabel+1, "goto " + four_tuple.size());
 			break;
 		}
 	}
 
-
+	public String get_fourtuple() { //返回四元组
+		String str = "";
+		for(int i = 0; i < four_tuple.size(); i++) {
+			str += i + "    " + four_tuple.get(i) + "\n";
+		}
+		return str;
+	}
+	
 }
 
 class Stack_record {
@@ -362,6 +373,7 @@ class Stack_record {
 	int width = 0;
 	boolean bool = false;
 	int label;
+	int ind;
 	public Stack_record(String s) {
 		this.symbol = s;
 	}

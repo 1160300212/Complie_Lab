@@ -10,7 +10,9 @@ public class G_Analyzer {
 	ArrayList<String[]> Action = new ArrayList<String[]>();
 	ArrayList<String> input = new ArrayList<String>();
 	
-	public G_Analyzer(ArrayList<Production> P, ArrayList<String[]> Action, ArrayList<String[]> Goto, ArrayList<String> input) {
+	String reduceseq = "";
+	
+	public G_Analyzer(ArrayList<Production> P, ArrayList<String[]> Action, ArrayList<String[]> Goto, ArrayList<String> input) { //构造函数
 		this.P = P;
 		this.Goto = Goto;
 		this.Action = Action;
@@ -19,7 +21,7 @@ public class G_Analyzer {
 		//analysis();
 	}
 	
-	public void analysis() {
+	public void analysis() { //对输入序列进行语法分析（移入，规约）
 		Stack<String> state_stk = new Stack<String>();
 		state_stk.push("0");
 		/*input.add("int");
@@ -58,12 +60,18 @@ public class G_Analyzer {
 					}
 				}
 				System.out.println(P.get(tmp).prod);
+				reduceseq += P.get(tmp).prod + "\n";
 			}
 			else if(op.equals("Action") && s.equals("acc")){
 				System.out.println(P.get(0).prod);
+				reduceseq += P.get(0).prod + "\n";
 				break;
 			}
 		}
+	}
+	
+	public String get_reduceseq(){ //返回规约的结果序列
+		return reduceseq;
 	}
 	
 }
